@@ -5,8 +5,12 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start" : "cp entry.js public/bundle.js && electron ."
+    "start": "cp entry.js public/bundle.js && electron ."
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "gl": "^2.1.5",
+    "regl": "0.0.0"
+  }
 }
