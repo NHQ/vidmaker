@@ -1,6 +1,7 @@
 var w = 640
 var h = 480
 var fs = require('fs')
+var net = require('net')
 var gl = require('gl')(w, h)
 var regl = require('./regl')(gl)
 
@@ -68,12 +69,31 @@ var draw = regl({
   count: 6
 })
 
-var start = Date.now()
-draw({
-  globalTime: (Date.now() - start) / 1000 + 1000
+
+var streamo = net.createServer(function(stream){
+  var start = Date.now()
+
+  var pixels = new Uint8Array(w * h * 4)
+
+  regl.frame(function(count){
+    var t = (Date.now() - start) / 1000
+    regl.clear({color: [Math.abs(Math.sin(t * Math.PI * 2 * 4)) ,0,1,1]})
+    gl.readPixels(0,0,w,h,gl.RGBA, gl.UNSIGNED_BYTE, pixels)
+    stream.write(new Buffer(pixels))
+
+    draw({
+      globalTime: (Date.now() - start) / 1000
+    })
+  })
+
+  setTimeout(function(){
+    stream.end()
+    process.exit()
+  }, 10000)
+
 })
 
-var pixels = new Uint8Array(w * h * 4)
-regl.clear({color: [1,0,0,1]})
-gl.readPixels(0,0,w,h,gl.RGBA, gl.UNSIGNED_BYTE, pixels)
-process.stdout.write(new Buffer(pixels))
+streamo.listen(2233)
+
+
+
