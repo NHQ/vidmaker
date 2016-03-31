@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cp entry.js public/bundle.js && electron ."
+    "start": "browserify bmain.js -o public/bundle.js --node && electron ."
   },
   "author": "",
   "license": "MIT",

@@ -5,8 +5,8 @@ var MenuItem = require('menu-item')
 
 app.on('ready', function(){
   var window = new bowser({
-    width: 640,
-    height: 480
+    width: 1280,
+    height: 720
   })
   window.loadUrl('file://' + __dirname + '/public/index.html')
   window.openDevTools()

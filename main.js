@@ -2,7 +2,7 @@ var w = 640
 var h = 480
 var fs = require('fs')
 var net = require('net')
-var gl = require('gl')(w, h)
+var gl = require('gl')(w, h, {preserveDrawingBuffer: true})
 var regl = require('./regl')(gl)
 
 var draw = regl({
@@ -77,19 +77,20 @@ var streamo = net.createServer(function(stream){
 
   regl.frame(function(count){
     var t = (Date.now() - start) / 1000
-    regl.clear({color: [Math.abs(Math.sin(t * Math.PI * 2 * 4)) ,0,1,1]})
-    gl.readPixels(0,0,w,h,gl.RGBA, gl.UNSIGNED_BYTE, pixels)
-    stream.write(new Buffer(pixels))
+    regl.clear({color: [Math.abs(Math.sin(t * Math.PI * 2 / 4)) ,0,1,0]})
+    //regl.clear({color: [0,0,0,1]})
 
     draw({
       globalTime: (Date.now() - start) / 1000
     })
+    gl.readPixels(0,0,w,h,gl.RGBA, gl.UNSIGNED_BYTE, pixels)
+    stream.write(new Buffer(pixels))
   })
 
   setTimeout(function(){
     stream.end()
     process.exit()
-  }, 10000)
+  }, 10000 / 3)
 
 })
 
